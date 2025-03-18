@@ -1,114 +1,280 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lion Share Calculator</title>
+    <title>Speculative LionShare Calculator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        .container {
+            max-width: 800px;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        .section {
             background-color: #f8f9fa;
-            padding-top: 50px; /* Adjusted padding */
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .result-section {
+            background-color: #e9ecef;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        .debug-info {
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
         }
         .navbar {
-            background-color: #007bff;
-            height: 45px; /* Reduced height */
-            padding: 5px 10px; /* Adjusted padding */
+            background-color: #1a4b8c;
+            padding: 10px 20px;
         }
-        .navbar-brand, .nav-link {
-            color: white !important;
-            font-size: 14px; /* Smaller font */
+        .navbar-brand {
+            color: white;
+            font-weight: 500;
         }
-        .container {
-            max-width: 600px;
-            margin-top: 20px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .btn-primary {
-            width: 100%;
-        }
-        .result {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 15px;
+        .navbar-brand:hover {
+            color: #f8b739;
         }
     </style>
 </head>
 <body>
-
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="https://closersregion.com">🏠 Home</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a class="navbar-brand" href="https://support.closersregion.com">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <span class="navbar-text">
+                Speculative LionShare Calculator
+            </span>
         </div>
     </nav>
 
-    <!-- Calculator Section -->
     <div class="container">
-        <h2 class="text-center">Lion Share Calculator</h2>
+        <h2 class="text-center mb-4">Speculative LionShare Calculator</h2>
+        
+        <div class="section">
+            <h4>Production Metrics</h4>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="submittedAV" class="form-label">Submitted AV:</label>
+                    <input type="number" id="submittedAV" class="form-control" placeholder="Enter amount">
+                </div>
+                <div class="col-md-4">
+                    <label for="issuedAV" class="form-label">Issued AV:</label>
+                    <input type="number" id="issuedAV" class="form-control" placeholder="Enter amount">
+                </div>
+                <div class="col-md-4">
+                    <label for="takenRate" class="form-label">Taken Rate (%):</label>
+                    <input type="number" id="takenRate" class="form-control" placeholder="e.g., 60 for 60%">
+                    <div class="form-text text-danger">
+                        Minimum 55% taken rate required for Lion Share eligibility
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <label>Submitted AV:</label>
-        <input type="number" id="submittedAV" class="form-control" placeholder="Enter Submitted AV">
+        <div class="section">
+            <h4>Agent Status</h4>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="lionStatus" class="form-label">Lion Status:</label>
+                    <select id="lionStatus" class="form-select">
+                        <option value="13w">13w - No Effect on buy-in or matching</option>
+                        <option value="26w">26w - No Effect on buy-in or matching</option>
+                        <option value="vet">Vet - No Effect on matching | Buy-In = $50</option>
+                        <option value="fta">FTA - Matching Limit = $1,000 | Buy-In = $200</option>
+                        <option value="fsl">FSL - Matching Limit = $1,500 | Buy-In = $400</option>
+                        <option value="sat">SAT - Matching Limit = $2,000 | Buy-In = $600</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="closersClub" class="form-label">Closers Club Membership:</label>
+                    <select id="closersClub" class="form-select">
+                        <option value="none">None - No override</option>
+                        <option value="newbies150k">Newbies150k - Matching Limit $500</option>
+                        <option value="newbies200k">Newbies200k - Matching Limit $750</option>
+                        <option value="newbies250k">Newbies250k - Matching Limit $1,000</option>
+                        <option value="closersClub">ClosersClub - Matching Limit $1,500</option>
+                        <option value="leaderClub">LeaderClub - Matching Limit $2,500</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
-        <label>Issued AV:</label>
-        <input type="number" id="issuedAV" class="form-control" placeholder="Enter Issued AV">
+        <div class="section">
+            <h4>Base & Bonus Destination</h4>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="baseAndBonusInInquery" checked>
+                <label class="form-check-label" for="baseAndBonusInInquery">
+                    Deposit Base and Bonus in InQuery (unchecked = Marketplace)
+                </label>
+            </div>
+        </div>
 
-        <label>Taken Rate (%):</label>
-        <input type="number" id="takenRate" class="form-control" placeholder="Enter Taken Rate (e.g., 60 for 60%)">
+        <div class="section">
+            <h4>Matching Preferences</h4>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="matchingPreference" id="matchingNextGen" checked>
+                    <label class="form-check-label" for="matchingNextGen">
+                        100% Matching in NextGen
+                    </label>
+                </div>
+                
+                <div id="nextGenOptions" class="ms-4 mb-3">
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label for="inqueryBuyIn" class="form-label">InQuery Buy-In Deposit:</label>
+                            <input type="number" id="inqueryBuyIn" class="form-control" placeholder="Enter amount">
+                            <div id="inqueryBuyInMinimum" class="form-text">
+                                Required minimum for InQuery: $0
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="marketplaceBuyInNextGen" class="form-label">Marketplace Buy-In Deposit:</label>
+                            <input type="number" id="marketplaceBuyInNextGen" class="form-control" placeholder="Enter amount">
+                            <div class="form-text">
+                                For remaining buy-in amount
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="nextGenMatchingDeposit" class="form-label">Matching Deposit:</label>
+                            <input type="number" id="nextGenMatchingDeposit" class="form-control" placeholder="Enter amount">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="matchingPreference" id="matchingMarketplace">
+                    <label class="form-check-label" for="matchingMarketplace">
+                        100% Matching in Marketplace
+                    </label>
+                </div>
+                
+                <div id="marketplaceOptions" class="ms-4 mb-3 hidden">
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label for="marketplaceBuyIn" class="form-label">Marketplace Buy-In Deposit:</label>
+                            <input type="number" id="marketplaceBuyIn" class="form-control" placeholder="Enter amount">
+                            <div id="marketplaceBuyInMinimum" class="form-text">
+                                Required buy-in: $<span id="requiredMarketplaceBuyIn">0</span>
+                                <br><small class="text-danger">Missing buy-in disqualifies from Lion Share</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="marketplaceMatchingDeposit" class="form-label">Matching Deposit:</label>
+                            <input type="number" id="marketplaceMatchingDeposit" class="form-control" placeholder="Enter amount">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="matchingPreference" id="matchingSplit">
+                    <label class="form-check-label" for="matchingSplit">
+                        50% in NextGen, 50% in Marketplace
+                    </label>
+                </div>
+                
+                <div id="splitOptions" class="ms-4 mb-3 hidden">
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label for="inqueryBuyInSplit" class="form-label">InQuery Buy-In Deposit:</label>
+                            <input type="number" id="inqueryBuyInSplit" class="form-control" placeholder="Enter amount">
+                            <div id="inqueryBuyInMinimumSplit" class="form-text">
+                                Required minimum for InQuery: $<span id="requiredInqueryBuyInSplit">0</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="nextGenMatchingDepositSplit" class="form-label">NextGen Matching Deposit:</label>
+                            <input type="number" id="nextGenMatchingDepositSplit" class="form-control" placeholder="Enter amount">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="marketplaceBuyInSplit" class="form-label">Marketplace Buy-In Deposit:</label>
+                            <input type="number" id="marketplaceBuyInSplit" class="form-control" placeholder="Enter amount">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="marketplaceMatchingDepositSplit" class="form-label">Marketplace Matching Deposit:</label>
+                            <input type="number" id="marketplaceMatchingDepositSplit" class="form-control" placeholder="Enter amount">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <button class="btn btn-primary mt-3" onclick="calculateLionShare()">Calculate</button>
+        <button id="calculateButton" class="btn btn-primary w-100 mb-4">Calculate Lion Share</button>
 
-        <p id="totalResult" class="result">Total Base & Bonus: --</p>
-        <p id="matchingResult" class="result">Matching: --</p>
+        <div id="resultsSection" class="result-section hidden">
+            <h4>Calculation Results</h4>
+            
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>Base:</strong> <span id="baseResult">$0</span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Bonus:</strong> <span id="bonusResult">$0</span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Total Base & Bonus:</strong> <span id="totalBaseBonus">$0</span>
+                    <div><small>in <span id="baseAndBonusPlatform">InQuery</span></small></div>
+                </div>
+                <div class="col-md-6">
+                    <strong>Matching Available:</strong> <span id="matchingAvailable">$0</span>
+                    <div><small id="matchingLimit">Matching Limit: $0</small></div>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <h5>Your Deposits</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>InQuery:</strong> <span id="totalInqueryDeposit">$0</span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Marketplace:</strong> <span id="totalMarketplaceDeposit">$0</span>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <h5>Matching Deposits</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>NextGen:</strong> <span id="nextGenMatchingResult">$0</span>
+                    <div id="nextGenBuyInStatus"></div>
+                </div>
+                <div class="col-md-6">
+                    <strong>Marketplace:</strong> <span id="marketplaceMatchingResult">$0</span>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <h5>Final Lion Share Allocation</h5>
+            <div id="finalAllocation"></div>
+        </div>
+
+        <!-- Debug Information Section -->
+        <div id="debugInfo" class="debug-info">
+            <h6>Debug Information</h6>
+            <div id="debugOutput"></div>
+        </div>
     </div>
 
-    <script>
-        function roundToNearest50(value) {
-            return Math.round(value / 50) * 50;
-        }
-
-        function calculateLionShare() {
-            let submittedAV = parseFloat(document.getElementById("submittedAV").value) || 0;
-            let issuedAV = parseFloat(document.getElementById("issuedAV").value) || 0;
-            let takenRate = parseFloat(document.getElementById("takenRate").value) || 0;
-
-            // Convert Taken Rate to decimal (e.g., 60 → 0.60)
-            takenRate = takenRate / 100;
-
-            // Base Calculation
-            let base = 0;
-            if (issuedAV > 0 && submittedAV > 0) {
-                base = 200;
-            } else if (issuedAV > 0) {
-                base = 75;
-            } else if (submittedAV > 0) {
-                base = 100;
-            }
-
-            // Bonus Calculation (Fixed Formula)
-            let bonus = ((submittedAV + issuedAV) / 100) * takenRate;
-
-            // Combine Base & Bonus
-            let totalBaseBonus = base + ((submittedAV + issuedAV) * (takenRate));
-
-            // Matching Calculation - Rounded to Nearest 50
-            let matching = roundToNearest50((submittedAV + issuedAV) / 100);
-
-            // Display results
-            document.getElementById("totalResult").innerText = "Total Base & Bonus: " + totalBaseBonus.toFixed(2);
-            document.getElementById("matchingResult").innerText = "Matching: " + matching;
-        }
-    </script>
-
+    <!-- Load the separate calculator script -->
+    <script src="calculator.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 </html>
