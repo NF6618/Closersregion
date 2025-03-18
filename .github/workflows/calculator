@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lion Share Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 60px;
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            width: 100%;
+        }
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Lion Share Calculator</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Support</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Calculator Section -->
+    <div class="container">
+        <h2 class="text-center">Lion Share Calculator</h2>
+
+        <label>Submitted AV:</label>
+        <input type="number" id="submittedAV" class="form-control" placeholder="Enter Submitted AV">
+
+        <label>Issued AV:</label>
+        <input type="number" id="issuedAV" class="form-control" placeholder="Enter Issued AV">
+
+        <label>Taken Rate (%):</label>
+        <input type="number" id="takenRate" class="form-control" placeholder="Enter Taken Rate (e.g., 60 for 60%)">
+
+        <button class="btn btn-primary mt-3" onclick="calculateLionShare()">Calculate</button>
+
+        <p id="totalResult" class="result">Total Base & Bonus: --</p>
+        <p id="matchingResult" class="result">Matching: --</p>
+    </div>
+
+    <script>
+        function roundToNearest50(value) {
+            return Math.round(value / 50) * 50;
+        }
+
+        function calculateLionShare() {
+            let submittedAV = parseFloat(document.getElementById("submittedAV").value) || 0;
+            let issuedAV = parseFloat(document.getElementById("issuedAV").value) || 0;
+            let takenRate = parseFloat(document.getElementById("takenRate").value) || 0;
+
+            // Convert Taken Rate to decimal (e.g., 60 → 0.60)
+            takenRate = takenRate / 100;
+
+            // Base Calculation
+            let base = 0;
+            if (issuedAV > 0 && submittedAV > 0) {
+                base = 200;
+            } else if (issuedAV > 0) {
+                base = 75;
+            } else if (submittedAV > 0) {
+                base = 100;
+            }
+
+            // Bonus Calculation (using correct formula)
+            let bonus = ((submittedAV + issuedAV) / 100) * takenRate;
+
+            // Combine Base & Bonus
+            let totalBaseBonus = base + bonus;
+
+            // Matching Calculation - Rounded to Nearest 50
+            let matching = roundToNearest50((submittedAV + issuedAV) / 100);
+
+            // Display results
+            document.getElementById("totalResult").innerText = "Total Base & Bonus: " + totalBaseBonus.toFixed(2);
+            document.getElementById("matchingResult").innerText = "Matching: " + matching;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
