@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,7 +69,7 @@
         <input type="number" id="issuedAV" class="form-control" placeholder="Enter Issued AV">
 
         <label>Taken Rate (%):</label>
-        <input type="number" id="takenRate" class="form-control" placeholder="Enter Taken Rate">
+        <input type="number" id="takenRate" class="form-control" placeholder="Enter Taken Rate (e.g., 60 for 60%)">
 
         <button class="btn btn-primary mt-3" onclick="calculateLionShare()">Calculate</button>
 
@@ -80,11 +79,19 @@
     </div>
 
     <script>
+        function roundToNearest50(value) {
+            return Math.round(value / 50) * 50;
+        }
+
         function calculateLionShare() {
             let submittedAV = parseFloat(document.getElementById("submittedAV").value) || 0;
             let issuedAV = parseFloat(document.getElementById("issuedAV").value) || 0;
             let takenRate = parseFloat(document.getElementById("takenRate").value) || 0;
 
+            // Convert Taken Rate to decimal (e.g., 60 → 0.60)
+            takenRate = takenRate / 100;
+
+            // Base Calculation
             let base = 0;
             if (issuedAV > 0 && submittedAV > 0) {
                 base = 200;
@@ -94,9 +101,13 @@
                 base = 100;
             }
 
+            // Bonus Calculation (using decimal Taken Rate)
             let bonus = ((submittedAV + issuedAV) / 100) * takenRate;
-            let matching = Math.round(((submittedAV + issuedAV) / 100) / 50) * 50;
 
+            // Matching Calculation - Rounded to Nearest 50
+            let matching = roundToNearest50((submittedAV + issuedAV) / 100);
+
+            // Display results
             document.getElementById("baseResult").innerText = "Base: " + base;
             document.getElementById("bonusResult").innerText = "Bonus: " + bonus.toFixed(2);
             document.getElementById("matchingResult").innerText = "Matching: " + matching;
